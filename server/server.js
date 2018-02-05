@@ -106,6 +106,21 @@ app.put('/api/vehicle/:vehicleId/user/:userId', (req,resp) => {
     }).catch(console.log)
 })
 
+app.delete('/api/user/:userId/vehicle/:vehicleId', (req, resp) => {
+    const db = req.app.get('db');
+    db.delete_ownership([req.params.userId,
+                        req.params.vehicleId])
+        .then(owner => {
+            resp.send(owner)
+        }).catch(console.log)
+})
 
+app.delete('/api/vehicle/:vehicleId', (req, resp) => {
+    const db = req.app.get('db');
+    db.delete_vehicle([req.params.vehicleId])
+        .then(owner => {
+            resp.send(owner)
+        }).catch(console.log)
+})
 const port = 3000;
 app.listen( port, () => { console.log(`I'm listening... on Port: ${port}.`); } );
