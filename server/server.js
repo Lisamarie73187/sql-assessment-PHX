@@ -39,19 +39,72 @@ app.post('/api/users', (req,resp)=> {
     const db = req.app.get('db');
     db.create_user([req.body.name, 
                    req.body.email, ])
-                   .then((newUser) => {
+        .then((newUser) => {
         resp.send(newUser)
     }).catch(console.log)
 })
 
 
-app.post('/api/users', (req,resp) => {
+app.post('/api/vehicles', (req,resp) => {
     const db =  req.app.get('db');
-    db.get_vehicles().then(cars => {
+    db.add_vehicle([req.body.make,
+                     req.body.model,
+                     req.body.year,
+                    req.body.owner_id])
+        .then(cars => {
         resp.send(cars)
     }).catch(console.log)
 })
 
+
+app.get('/api/user/:userId/vehiclecount', (req,resp) => {
+    const db =  req.app.get('db');
+    db.get_vehicle_by_user_count([req.params.userId])
+        .then(cars => {
+        resp.send(cars)
+    }).catch(console.log)
+})
+    
+app.get('/api/user/:userId/vehicle', (req,resp) => {
+    const db =  req.app.get('db');
+    db.get_vehicles_by_user([req.params.userId])
+        .then(cars => {
+        resp.send(cars)
+    }).catch(console.log)
+})
+
+app.get('/api/vehicle', (req,resp) => {
+    const db =  req.app.get('db');
+    if(req.query.userEmail){
+        db.get_vehicles_by_email([req.query.userEmail])
+            .then(cars => {
+            resp.send(cars)
+        }).catch(console.log)
+    }else if(req.query.userFirstStart) {
+        db.get_vehicles_search_users([req.query.userFirstStart + '%'])
+            .then(cars => {
+            resp.send(cars)
+        }).catch(console.log)
+    }
+})
+
+app.get('/api/newervehiclesbyyear', (req,resp) => {
+    const db =  req.app.get('db');
+    db.get_vehicles_new()
+        .then(cars => {
+        resp.send(cars)
+    }).catch(console.log)
+})
+
+
+app.put('/api/vehicle/:vehicleId/user/:userId', (req,resp) => {
+    const db =  req.app.get('db');
+    db.update_owner([req.params.vehicleId,
+                    req.params.userId])
+        .then(car => {
+        resp.send(car)
+    }).catch(console.log)
+})
 
 
 const port = 3000;
