@@ -81,7 +81,7 @@ app.get('/api/vehicle', (req,resp) => {
             resp.send(cars)
         }).catch(console.log)
     }else if(req.query.userFirstStart) {
-        db.get_vehicles_search_users([req.query.userFirstStart + '%'])
+        db.get_vehicles_search_users([req.query.userFirstStart + "%"])
             .then(cars => {
             resp.send(cars)
         }).catch(console.log)
